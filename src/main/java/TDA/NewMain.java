@@ -35,9 +35,9 @@ public class NewMain {
         System.out.println(CharacterList2);
         System.out.println(CharacterList3);*/
 
-        trie.Insert(CharacterList1);
-        trie.Insert(CharacterList2);
-        trie.Insert(CharacterList3);
+        trie.insert(CharacterList1);
+        trie.insert(CharacterList2);
+        trie.insert(CharacterList3);
         
         trie.printTree(trie.getRoot(), "");
         System.out.println("FIND holi y bola ");
@@ -50,8 +50,8 @@ public class NewMain {
         System.out.println(trie.find(CharacterList2));
         System.out.println(trie.find(CharacterList3));
         System.out.println("INSERT coco y holi");
-        trie.Insert(CharacterList4);
-        trie.Insert(CharacterList2);
+        trie.insert(CharacterList4);
+        trie.insert(CharacterList2);
         System.out.println("FIND holi y coco");
         System.out.println(trie.find(CharacterList2));
         System.out.println(trie.find(CharacterList4));
@@ -64,10 +64,10 @@ public class NewMain {
         contentLists.add(Arrays.asList("h", "a", "b", "a"));
         contentLists.add(Arrays.asList("b", "o", "l", "a"));
 
-        trie.Insert(contentLists.get(0));
-        trie.Insert(contentLists.get(1));
-        trie.Insert(contentLists.get(2));
-        trie.Insert(contentLists.get(3));
+        trie.insert(contentLists.get(0));
+        trie.insert(contentLists.get(1));
+        trie.insert(contentLists.get(2));
+        trie.insert(contentLists.get(3));
 
         System.out.println(trie.find(contentLists.get(3)));
         System.out.println(trie.delete(contentLists.get(3)));

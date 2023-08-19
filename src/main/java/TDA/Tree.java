@@ -4,6 +4,7 @@
  */
 package TDA;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,7 +48,7 @@ public class Tree<T> {
     }
 
     /*
-    public void Insert(List<T> elements) {
+    public void insert(List<T> elements) {
 
         TreeNode<T> currentNode = root;
 
@@ -71,8 +72,8 @@ public class Tree<T> {
         }
 
     }*/
-
-    public void Insert(List<T> contentList) {
+ /*
+    public void insert(List<T> contentList) {
         TreeNode<T> currentNode = root;
 
         for (T content : contentList) {
@@ -114,31 +115,30 @@ public class Tree<T> {
 
         return true;
     }
-
+ 
     public boolean delete(List<T> contentList) {
         return deleteRecursive(root, contentList, 0);
     }
 
-    private boolean deleteRecursive(TreeNode<T> currentNode, List<T> contentList, int index) {
+    public boolean deleteRecursive(TreeNode<T> currentNode, List<T> contentList, int index) {
         if (index == contentList.size()) {
-            return true; // All elements of the contentList are matched, this is the node to delete
+            return true;
         }
 
         for (Tree<T> childTree : currentNode.getChildren()) {
             if (childTree.getRoot().getContent().equals(contentList.get(index))) {
                 boolean deleted = deleteRecursive(childTree.getRoot(), contentList, index + 1);
                 if (deleted && index == contentList.size() - 1) {
-                    if (childTree.getRoot().getChildren().size() > 0) {
-                        childTree.getRoot().getChildren().clear(); // Remove all children
-                    } else {
-                        currentNode.getChildren().remove(childTree); // Remove the child itself
+                    if (childTree.getRoot().getChildren().isEmpty()) {
+                        currentNode.getChildren().remove(childTree);
                     }
+                    return true;
                 }
                 return deleted;
             }
         }
 
-        return false; // Element not found
+        return false;
     }
 
     public void printTree(TreeNode<T> node, String prefix) {
@@ -151,6 +151,43 @@ public class Tree<T> {
         for (Tree<T> childTree : childTrees) {
             printTree(childTree.getRoot(), prefix + "  ");
         }
+    }*/
+    public void insert(List<T> values) {
+        root.insert(values);
+    }
+    
+    public void delete(List<T> values) {
+            root.delete(values);
+        }
+    
+    public boolean find(List<T> values) {
+            return root.find(values);
+        }
+    
+    
+    
+/*
+    public void delete(List<T> values) {
+        TreeNode<T> currentNode = root;
+        for (T value : values) {
+            currentNode = currentNode.getChild(value);
+            if (currentNode == null) {
+                break;
+            }
+        }
+        if (currentNode != null) {
+            currentNode.clearChildren();
+        }
     }
 
+    public boolean find(List<T> values) {
+        TreeNode<T> currentNode = root;
+        for (T value : values) {
+            currentNode = currentNode.getChild(value);
+            if (currentNode == null) {
+                return false;
+            }
+        }
+        return true;
+    }*/
 }

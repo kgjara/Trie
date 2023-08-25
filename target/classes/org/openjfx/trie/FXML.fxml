@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="645.0" prefWidth="903.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.openjfx.trie.FXMLController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="678.0" prefWidth="915.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.openjfx.trie.FXMLController">
    <children>
       <AnchorPane fx:id="PaneGlobal" prefHeight="576.0" prefWidth="781.0">
          <children>
@@ -16,11 +16,11 @@
             <Button fx:id="ButtonInsert" layoutX="255.0" layoutY="29.0" mnemonicParsing="false" onAction="#Insert" prefHeight="26.0" prefWidth="90.0" text="Insert" />
             <Button fx:id="ButtonDelete" layoutX="364.0" layoutY="29.0" mnemonicParsing="false" onAction="#Delete" prefHeight="26.0" prefWidth="91.0" text="Delete" />
             <Button fx:id="ButtonFind" layoutX="471.0" layoutY="29.0" mnemonicParsing="false" onAction="#Find" prefHeight="26.0" prefWidth="91.0" text="Find" />
-            <AnchorPane layoutX="753.0" prefHeight="645.0" prefWidth="150.0" style="-fx-background-color: blue;">
+            <AnchorPane layoutX="764.0" prefHeight="678.0" prefWidth="151.0" style="-fx-background-color: blue;">
                <children>
                   <Button fx:id="ButtonSave" layoutX="-2.0" layoutY="186.0" mnemonicParsing="false" onAction="#SaveWords" prefHeight="45.0" prefWidth="151.0" text="Save" />
                   <Button fx:id="ButtonLoad" layoutX="-2.0" layoutY="255.0" mnemonicParsing="false" onAction="#Load" prefHeight="45.0" prefWidth="151.0" text="Load" />
-                  <Button fx:id="ButtonStats" layoutX="-2.0" layoutY="321.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="151.0" text="Stats" />
+                  <Button fx:id="ButtonStats" layoutX="-2.0" layoutY="321.0" mnemonicParsing="false" onAction="#showStatisticsPanel" prefHeight="45.0" prefWidth="151.0" text="Stats" />
                </children>
             </AnchorPane>
          </children></AnchorPane>

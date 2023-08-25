@@ -1,4 +1,5 @@
 org\openjfx\trie\FXMLController.class
 TDA\Tree.class
-TDA\TreeNode.class
 module-info.class
+org\openjfx\trie\App.class
+TDA\TreeNode.class

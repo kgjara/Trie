@@ -14,14 +14,17 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -29,12 +32,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 /**
  *
@@ -68,16 +73,18 @@ public class FXMLController implements Initializable {
     private double xOffset = 400;
     private double yOffset = 50;
     private double xSpacing = 60;
-    private double ySpacing = 100;
+    private double ySpacing = 80;
+
+    private int CountTotalWords = 0;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        textFieldSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+        /*textFieldSearch.textProperty().addListener((observable, oldValue, newValue) -> {
             suggestionsListView.setVisible(true);
             List<String> suggestions = suggestWords(newValue.toLowerCase());
             suggestionsListView.setItems(FXCollections.observableArrayList(suggestions));
         });
-
+*/
         suggestionsListView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 1) {
                 String selectedWord = suggestionsListView.getSelectionModel().getSelectedItem();
@@ -86,6 +93,20 @@ public class FXMLController implements Initializable {
                 }
             }
         });
+
+        textFieldSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+            suggestionsListView.setVisible(true);
+
+            if (newValue.endsWith(" ")) {
+                String ending = newValue.trim();
+                List<String> suggestions = suggestWordsEndingWith(ending.toLowerCase());
+                suggestionsListView.setItems(FXCollections.observableArrayList(suggestions));
+            } else {
+                List<String> suggestions = suggestWords(newValue.toLowerCase());
+                suggestionsListView.setItems(FXCollections.observableArrayList(suggestions));
+            }
+        });
+
     }
 
     @FXML
@@ -102,6 +123,7 @@ public class FXMLController implements Initializable {
         }
         textFieldSearch.clear();
         suggestionsListView.setVisible(false);
+        CountTotalWords++;
     }
 
     @FXML
@@ -305,4 +327,93 @@ public class FXMLController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    private List<String> suggestWordsEndingWith(String ending) {
+        List<String> suggestions = new ArrayList<>();
+        if (!ending.isEmpty()) {
+            TreeNode<String> endingNode = findEndingNode(trie.getRoot(), ending);
+            if (endingNode != null) {
+                List<String> currentPath = new ArrayList<>();
+                findWordsEndingWith(endingNode, currentPath, suggestions, ending);
+            }
+        }
+        return suggestions;
+    }
+
+    private TreeNode<String> findEndingNode(TreeNode<String> node, String ending) {
+        if (ending.isEmpty()) {
+            return node;
+        }
+
+        String lastChar = ending.substring(ending.length() - 1);
+        for (Tree<String> childTree : node.getChildren()) {
+            if (childTree.getRoot().getContent().equals(lastChar)) {
+                return findEndingNode(childTree.getRoot(), ending.substring(0, ending.length() - 1));
+            }
+        }
+        return null;
+    }
+
+    private void findWordsEndingWith(TreeNode<String> node, List<String> currentPath, List<String> suggestions, String ending) {
+        String currentWord = String.join("", currentPath);
+
+        if (!node.getContent().isEmpty()) {
+            currentWord += node.getContent();
+            if (currentWord.endsWith(ending)) {
+                suggestions.add(currentWord);
+            }
+        }
+
+        for (Tree<String> childTree : node.getChildren()) {
+            List<String> newPath = new ArrayList<>(currentPath);
+            newPath.add(childTree.getRoot().getContent());
+            findWordsEndingWith(childTree.getRoot(), newPath, suggestions, ending);
+        }
+    }
+
+    public void showStatisticsPanel() {
+        // Crear un nuevo Pane para mostrar las estadísticas
+        Pane statisticsPane = new Pane();
+
+        // Obtener y mostrar las estadísticas
+        Text totalWordsText = new Text("Total de palabras: " + CountTotalWords);
+        totalWordsText.setLayoutY(20);
+        statisticsPane.getChildren().add(totalWordsText);
+
+        // Agregar más Text o elementos para mostrar otras estadísticas
+        int yOffset = 50;
+        Text lettersCountTitle = new Text("Palabras por cada letra del abecedario:");
+        lettersCountTitle.setLayoutY(yOffset);
+        statisticsPane.getChildren().add(lettersCountTitle);
+        yOffset += 20;
+
+        for (Tree<String> childTree : trie.getRoot().getChildren()) {
+            String letter = childTree.getRoot().getContent();
+            int wordsStartingWithLetter = countWordsStartingWithLetter(childTree.getRoot());
+            if (wordsStartingWithLetter > 0) {
+                Text letterCountText = new Text(letter + ": " + wordsStartingWithLetter + " palabra" + (wordsStartingWithLetter > 1 ? "s" : ""));
+                letterCountText.setLayoutY(yOffset);
+                statisticsPane.getChildren().add(letterCountText);
+
+                yOffset += 20;
+            }
+        }
+        // Crear una nueva ventana para mostrar el panel de estadísticas
+        Stage statisticsStage = new Stage();
+        Scene statisticsScene = new Scene(statisticsPane, 300, 200);
+        statisticsStage.setScene(statisticsScene);
+        statisticsStage.setTitle("Estadísticas");
+        statisticsStage.show();
+    }
+
+    private int countWordsStartingWithLetter(TreeNode<String> node) {
+        int count = node.getContent().isEmpty() ? 0 : 1;
+
+        for (Tree<String> childTree : node.getChildren()) {
+            count += countWordsStartingWithLetter(childTree.getRoot());
+        }
+
+        return count;
+    }
+
 }

@@ -16,6 +16,7 @@ public class TreeNode<T> {
 
     private T content;
     private List<Tree<T>> children;
+    private boolean isWord = false;
 
     public TreeNode(T content) {
         this.content = content;
@@ -28,6 +29,14 @@ public class TreeNode<T> {
 
     public void setContent(T content) {
         this.content = content;
+    }
+
+    public boolean isWord() {
+        return isWord;
+    }
+
+    public void setWord(boolean isWord) {
+        this.isWord = isWord;
     }
 
     public List<Tree<T>> getChildren() {
@@ -49,17 +58,21 @@ public class TreeNode<T> {
     }*/
     public void insert(List<T> values) {
         if (values.isEmpty()) {
-            return;
-        }
+        return;
+    }
 
-        T firstValue = values.get(0);
-        Tree<T> childTree = getChildTree(firstValue);
-        if (childTree == null) {
-            childTree = new Tree<>(firstValue);
-            children.add(childTree);
-        }
+    T firstValue = values.get(0);
+    Tree<T> childTree = getChildTree(firstValue);
+    if (childTree == null) {
+        childTree = new Tree<>(firstValue);
+        children.add(childTree);
+    }
 
-        childTree.getRoot().insert(values.subList(1, values.size()));
+    if (values.size() == 1) {
+        childTree.getRoot().setWord(true);  // Establecer isWord en true para el nodo hoja
+    }
+
+    childTree.getRoot().insert(values.subList(1, values.size()));
     }
 
     public void delete(List<T> values) {
@@ -100,7 +113,6 @@ public class TreeNode<T> {
         }
         return null;
     }
-    
 
     public void clearChildren() {
         children.clear();

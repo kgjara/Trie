@@ -38,7 +38,7 @@ public class NewMain {
         trie.insert(CharacterList1);
         trie.insert(CharacterList2);
         trie.insert(CharacterList3);
-        
+        /*
         trie.printTree(trie.getRoot(), "");
         System.out.println("FIND holi y bola ");
         System.out.println(trie.find(CharacterList2));
